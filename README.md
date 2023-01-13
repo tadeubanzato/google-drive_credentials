@@ -44,7 +44,7 @@ The file will look something like this:
 
 The script use the PyDrive library: https://pypi.org/project/PyDrive/
 
-You should be able to install it by running `pip3 install PyDrive `
+You should be able to install it by runing `pip3 install PyDrive `
 
 Once the library is installed here is the script `google_authentication.py`
 `````python
