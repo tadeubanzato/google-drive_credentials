@@ -1,7 +1,5 @@
-
 from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
-
 
 ## Start Google Authentication
 gauth = GoogleAuth()
