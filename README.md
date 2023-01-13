@@ -9,11 +9,13 @@ I've been doing a few Python project just for hobby and one of the projects I ne
 I always had major issues with credential validation and refresh of the credentials so instead of having to solve every time an issue happened I tried to build a better version of what was my first iteration of a file transfer scrip to Google Drive.
 
 ## How to get the Google Drive credentials
+> I do not need to say that you will have to create an account in case you do not have it
+
 1. Enable the Gdrive credential in your Google Cloud page: https://console.cloud.google.com/apis/dashboard
 2. Click on the + ENABLE APIS AND SERVICES link on top below the search bar
 3. Find the Google Drive API and click on it to enable (should be straight forward but I'll add screenshots later)
 
-Once you Enable the GDrive API you will need to generate a credential
+#### Once you Enable the GDrive API you will need to generate a credential
 1. On the left menu or through this direct link https://console.cloud.google.com/apis/credentials you get to where the work needs to be done.
 2. Click on +CREATE CREDENTIALS on the upper part of the screen below the search bar
 4. Once you click to create the credentials you need to select OAuth client ID - https://console.cloud.google.com/apis/credentials/oauthclient
@@ -37,4 +39,42 @@ The file will look something like this:
    }
 }
 ```
-> I do not need to say that you will have to create an account in case you do not have it
+
+# Python 0Auth GDrive
+The script use the PyDrive library: https://pypi.org/project/PyDrive/
+You should be able to install it by runing `pip3 install PyDrive `
+
+Once the library is installed here is the script `google_authentication.py`
+`````python
+
+from pydrive.drive import GoogleDrive
+from pydrive.auth import GoogleAuth
+
+
+## Start Google Authentication
+gauth = GoogleAuth()
+
+# Load JSON credentials downloaded from Google
+GoogleAuth.DEFAULT_SETTINGS['client_config_file'] = 'credentials/client_secrets.json'
+# Try to use the credential .txt generated at the first 0Auth approval
+gauth.LoadCredentialsFile("credentials/mycreds.txt")
+
+# If the app was not yet authenticated it will ask to get the authentication from Google
+if gauth.credentials is None:
+    # Authenticate if they're not there
+    # gauth.LocalWebserverAuth() # <-- WebApp approval
+    gauth.CommandLineAuth()  # <-- Command Line Approva
+
+# If credential has expired refresh
+elif gauth.access_token_expired:
+    gauth.Refresh()
+
+# Initialize the saved creds
+else:
+    gauth.Authorize()
+
+# Save current credentials into a TXT file for the future
+gauth.SaveCredentialsFile("credentials/mycreds.txt")
+drive = GoogleDrive(gauth)
+
+`````

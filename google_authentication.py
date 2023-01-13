@@ -2,29 +2,29 @@
 from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
 
-'''
-This is a credential validation
 
-######### Google Authentication #########
-
+## Start Google Authentication
 gauth = GoogleAuth()
-######### Try to load saved client credentials
 
+# Load JSON credentials downloaded from Google
 GoogleAuth.DEFAULT_SETTINGS['client_config_file'] = 'credentials/client_secrets.json'
+# Try to use the credential .txt generated at the first 0Auth approval
 gauth.LoadCredentialsFile("credentials/mycreds.txt")
 
+# If the app was not yet authenticated it will ask to get the authentication from Google
 if gauth.credentials is None:
     # Authenticate if they're not there
     # gauth.LocalWebserverAuth() # <-- WebApp approval
     gauth.CommandLineAuth()  # <-- Command Line Approva
 
+# If credential has expired refresh
 elif gauth.access_token_expired:
-    # Refresh them if expired
     gauth.Refresh()
 
+# Initialize the saved creds
 else:
-    # Initialize the saved creds
     gauth.Authorize()
-# Save the current credentials to a file
+
+# Save current credentials into a TXT file for the future
 gauth.SaveCredentialsFile("credentials/mycreds.txt")
 drive = GoogleDrive(gauth)
