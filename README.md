@@ -47,11 +47,9 @@ The script use the PyDrive library: https://pypi.org/project/PyDrive/
 You should be able to install it by runing `pip3 install PyDrive `
 
 Once the library is installed here is the script `google_authentication.py`
-`````python
-
+```python
 from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
-
 
 ## Start Google Authentication
 gauth = GoogleAuth()
@@ -78,5 +76,15 @@ else:
 # Save current credentials into a TXT file for the future
 gauth.SaveCredentialsFile("credentials/mycreds.txt")
 drive = GoogleDrive(gauth)
+```
+## After Authentication
+After the connection and authentication is done you can run the example script below to list all files
+```python
+## Example: List all files in the drive
+file_list = drive.ListFile({'q': "'root' in parents and trashed=false"}).GetList()
+for file1 in file_list:
+  print('title: %s, id: %s' % (file1['title'], file1['id']))
+```
 
-`````
+More references on PyDrive documentation:
+https://pythonhosted.org/PyDrive/index.html

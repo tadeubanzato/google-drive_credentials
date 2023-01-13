@@ -26,3 +26,9 @@ else:
 # Save current credentials into a TXT file for the future
 gauth.SaveCredentialsFile("credentials/mycreds.txt")
 drive = GoogleDrive(gauth)
+
+
+## Example: List all files in the drive
+file_list = drive.ListFile({'q': "'root' in parents and trashed=false"}).GetList()
+for file1 in file_list:
+  print('title: %s, id: %s' % (file1['title'], file1['id']))
